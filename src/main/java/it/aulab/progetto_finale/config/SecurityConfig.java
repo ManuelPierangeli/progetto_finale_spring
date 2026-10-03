@@ -31,25 +31,25 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR)
+                                                .requestMatchers("/register/**").permitAll()
+                                                .requestMatchers("/register", "/", "/articles", "/images/**",
+                                                                "/articles/detail/**",
+                                                                "/categories/search/{id}",
+                                                                "/search/{id}")
                                                 .permitAll()
-                                                .requestMatchers("/register/**", "/register", "/login").permitAll()
                                                 .anyRequest().authenticated())
-                                .formLogin(form -> form
-                                                .loginPage("/login")
+                                .formLogin(form -> form.loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/", true)
+                                                .defaultSuccessUrl("/")
                                                 .permitAll())
                                 .logout(logout -> logout
                                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                                 .permitAll())
-                                .exceptionHandling(exception -> exception
-                                                .accessDeniedPage("/error/403"))
+                                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"))
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                                                 .maximumSessions(1)
                                                 .expiredUrl("/login?session-expired=true"));
-
                 return http.build();
         }
 
