@@ -1,0 +1,168 @@
+/* ===================================
+   VARIABLES & GLOBAL STYLES
+   =================================== */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --dark-bg: #12161a;
+    --light-bg: #f8f9fa;
+    --transition-speed: 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Spaziatura per consentire al footer di rimanere in basso se la pagina è corta */
+main {
+    flex: 1;
+}
+
+/* ===================================
+   NAVBAR UX/UI REFINEMENT
+   =================================== */
+.navbar {
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    transition: all var(--transition-speed);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--primary-color) !important;
+    font-size: 1.4rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #495057 !important;
+    transition: color var(--transition-speed);
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* ===================================
+   BUTTONS & FORMS UX
+   =================================== */
+.btn {
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 500;
+    transition: all var(--transition-speed);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(13, 110, 253, 0.4);
+}
+
+.form-control {
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #ced4da;
+    transition: all var(--transition-speed);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+    border-color: var(--primary-color);
+}
+
+/* ===================================
+   FOOTER STYLING
+   =================================== */
+footer {
+    background-color: var(--dark-bg) !important;
+    color: #adb5bd;
+    font-size: 0.95rem;
+}
+
+footer h5 {
+    color: #fff;
+    font-weight: 600;
+}
+
+footer a {
+    transition: color var(--transition-speed);
+}
+
+footer a:hover {
+    color: #ffffff !important;
+}
+
+/* ===================================
+   AGGIUNTE PER LAYOUT E NAVBAR FISSA
+   =================================== */
+body {
+    padding-top: 70px;
+    /* Compensa l'altezza della navbar fixed-top */
+}
+
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.dropdown-menu {
+    border-radius: 12px;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    border-radius: 8px;
+    transition: background-color var(--transition-speed);
+}
+
+.dropdown-item:hover {
+    background-color: var(--light-bg);
+}
+
+/* ===================================
+   STYLING SPECIFICO PER IL DETTAGLIO ARTICOLO
+   =================================== */
+.article-carousel-inner {
+    height: 400px;
+}
+
+.article-carousel-inner img {
+    height: 100% !important;
+    object-fit: cover;
+}
+
+/* ===================================
+   STYLING STANDARD PER LE CARD ARTICOLI
+   =================================== */
+.card-img-wrapper {
+    height: 400px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-speed);
+}
+
+/* Effetto zoom opzionale e gradevole al passaggio del mouse sulle card */
+.article-card:hover .card-img-wrapper img {
+    transform: scale(1.05);
+}

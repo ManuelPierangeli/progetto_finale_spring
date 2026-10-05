@@ -44,8 +44,8 @@ public class ImageServiceImpl implements ImageService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void saveImageOnDB(String url, Article article) {
-        url = url.replace(supabaseBucket, supabaseImage);
-        imageRepository.save(Image.builder().path(url).article(article).build());
+        String publicUrl = url.replace("/object/bucket/", "/object/public/bucket/");
+        imageRepository.save(Image.builder().path(publicUrl).article(article).build());
     }
 
     @Async
@@ -54,9 +54,11 @@ public class ImageServiceImpl implements ImageService {
             try {
                 String nameFile = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
                 String extension = StringManipulation.getFileExtension(nameFile);
+                
+                // Questo è il formato che faceva funzionare l'upload su Supabase
                 String url = supabaseUrl + supabaseBucket + nameFile;
+                
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-
                 body.add("file", file.getBytes());
 
                 HttpHeaders headers = new HttpHeaders();
@@ -89,13 +91,12 @@ public class ImageServiceImpl implements ImageService {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer" + supabaseKey);
+        headers.set("Authorization", "Bearer " + supabaseKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
 
         System.out.println(response.getBody());
-
     }
 }

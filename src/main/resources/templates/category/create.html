@@ -1,41 +1,64 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 
 <head th:insert="~{index :: head}"></head>
 
 <body>
 
-    <head th:insert="~{index :: navbar}"></head>
+    <!-- Navbar -->
+    <header>
+        <div th:insert="~{index :: navbar}"></div>
+    </header>
 
-    <div class="vh-100">
-        <div class="container">
-            <div class="row">
+    <!-- Contenuto Principale -->
+    <main class="container py-5 my-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                
+                <!-- Header della pagina -->
+                <div class="text-center mb-4">
+                    <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-2 fw-semibold text-uppercase">Gestione Categorie</span>
+                    <h1 class="fw-bold text-dark" th:text="${title}">Inserisci una categoria</h1>
+                    <p class="text-muted">Aggiungi una nuova categoria per organizzare al meglio gli articoli.</p>
+                </div>
 
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">Inserisci una categoria</h1>
+                <!-- Form Card -->
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                    <div class="card-body">
+                        <form th:action="@{/categories}" method="POST" th:object="${category}">
+                            
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-semibold text-dark">Nome categoria</label>
+                                <input id="name" type="text" class="form-control" th:field="*{name}"
+                                    placeholder="Es. Tecnologia, Economia, Sport...">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-plus-circle me-2"></i> Crea categoria
+                                </button>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
 
-                <div class="col-12 my-5">
-                    <form th:action="@{/categories}" method="POST" th:object="${category}">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="name" class="form-label">Nome categoria</label>
-                                <input id="name" type="text" class="form-control" th:field="*{name}"
-                                    placeholder="Inserisci il nome della categoria...">
-                                <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-success">Crea categoria</button>
-                    </form>
+                <!-- Torna indietro -->
+                <div class="text-center mt-4">
+                    <a href="javascript:history.back()" class="text-secondary text-decoration-none small">
+                        <i class="fas fa-arrow-left me-1"></i> Torna indietro
+                    </a>
                 </div>
 
             </div>
         </div>
-    </div>
+    </main>
 
-    <head th:insert="~{index :: footer}"></head>
+    <!-- Footer -->
+    <footer th:insert="~{index :: footer}"></footer>
+
+    <!-- Script Bootstrap -->
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
 

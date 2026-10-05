@@ -1,87 +1,113 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head th:insert="~{index :: head}"></head>
+
 <body>
-    <div th:insert="~{index :: navbar}"></div>
+    <!-- Navbar -->
+    <header>
+        <div th:insert="~{index :: navbar}"></div>
+    </header>
 
-    <div class="container-fluid p-5 bg-secondary-subtle text-center">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <span class="h1">Articolo</span>
-                <h2 th:text="${article.title}">Titolo</h2>
+    <main>
+        <!-- Header della pagina articolo -->
+        <section class="container-fluid py-5 bg-light border-bottom text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3 fw-semibold text-uppercase">Dettaglio Articolo</span>
+                    <h1 class="display-5 fw-bold text-dark" th:text="${article.title}">Titolo Articolo</h1>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 d-flex flex-column">
-                <div id="carouselExample" class="carousel slide">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
-                            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="...">
+        <!-- Contenuto Principale -->
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    
+                    <!-- Carousel Immagine Articolo -->
+                    <div id="articleCarousel" class="carousel slide shadow-sm rounded-4 overflow-hidden mb-4 bg-dark">
+                        <div class="carousel-inner article-carousel-inner">
+                            <div class="carousel-item active">
+                                <img th:if="${article.image != null and article.image.path != null and !article.image.path.empty}"
+                                    th:src="${article.image.path}" class="d-block w-100 object-fit-cover" alt="Immagine articolo">
+                                <img th:unless="${article.image != null and article.image.path != null and !article.image.path.empty}"
+                                    th:src="@{/images/default.jpg}" class="d-block w-100 object-fit-cover" alt="Immagine di default">
+                            </div>
+                        </div>
+                        <!-- Se in futuro avrai più immagini, i controlli del carousel funzioneranno nativamente -->
+                    </div>
+
+                    <!-- Sottotitolo -->
+                    <div class="text-center mb-4">
+                        <h2 class="h4 text-muted fw-normal" th:text="${article.subtitle}">Sottotitolo</h2>
+                    </div>
+
+                    <!-- Meta info (Categoria, Autore, Data) -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-between bg-light p-3 rounded-3 mb-4 text-muted small">
+                        <div>
+                            <span>Categoria: </span>
+                            <a th:if="${article.category != null}" th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                                class="text-capitalize fw-bold text-primary text-decoration-none" th:text="${article.category.name}">categoria</a>
+                            <span th:unless="${article.category != null}" class="fst-italic">Nessuna categoria</span>
+                        </div>
+                        <div>
+                            <span>Redatto il <strong class="text-dark" th:text="${article.publishDate}">data</strong> da </span>
+                            <a class="fw-bold text-dark text-decoration-none" th:href="@{/search/{id}(id=${article.user.id})}">
+                                <span th:text="${article.user.username}">User</span>
+                            </a>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
 
-                <div class="text-center mt-4">
-                    <h2 th:text="${article.subtitle}">Sottotitolo</h2>
-                </div>
+                    <hr class="my-4">
 
-                <div class="fs-5 mt-3">
-                    <div th:if="${article.category != null}">
-                        Categoria: 
-                        <a th:href="@{/categories/search/{id}(id=${article.category.id})}" class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">categoria</a>
+                    <!-- Corpo dell'articolo -->
+                    <div class="article-body fs-5 text-secondary lh-lg mb-5">
+                        <p th:text="${article.body}"></p>
                     </div>
-                    <div th:unless="${article.category != null}">
-                        Nessuna categoria
+
+                    <!-- Azioni Revisore (Accetta / Rifiuta) -->
+                    <div class="card bg-light border-0 rounded-4 p-4 mb-4">
+                        <h5 class="fw-bold text-center mb-3">Azioni di Revisione</h5>
+                        <div class="d-flex justify-content-center gap-3">
+                            <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="post">
+                                <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-check me-2"></i> Accetta
+                                </button>
+                            </form>
+
+                            <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="post" th:object="${article}">
+                                <button type="submit" class="btn btn-danger px-4 py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-times me-2"></i> Rifiuta
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <div class="text-muted my-3">
-                    Redatto il <span th:text="${article.publishDate}">data</span> da
-                    <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
-                        <span th:text="${article.user.username}">User</span>
-                    </a>
-                </div>
+                    <!-- Torna indietro -->
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn btn-link text-secondary text-decoration-none" onclick="goBack()">
+                            <i class="fas fa-arrow-left me-1"></i> Torna indietro
+                        </button>
+                    </div>
 
-                <hr>
-                
-                <p th:text="${article.body}"></p>
-
-                <div class="text-center my-3">
-                    <a href="#" class="text-secondary pointer" onclick="goBack()">Torna indietro</a>
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="post">
-                        <button type="submit" class="btn btn-success m-2">Accetta</button>
-                    </form>
-                    
-                    <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="post" th:object="${article}">
-                        <button type="submit" class="btn btn-danger m-2">Rifiuta</button>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <head th:insert="~{index :: footer}"></head>
+    <!-- Footer -->
+    <footer th:insert="~{index :: footer}"></footer>
+
+    <!-- Script Bootstrap -->
     <script th:replace="~{index :: bootstrapScript}"></script>
-    
+
+    <!-- Script JavaScript personalizzato -->
     <script>
         function goBack() {
             window.history.back();
         }
     </script>
 </body>
+
 </html>

@@ -10,25 +10,30 @@
         <div th:insert="~{index :: navbar}"></div>
     </header>
 
+    <!-- Header / Eroe della pagina -->
+    <section class="container-fluid py-5 bg-light border-bottom text-center">
+        <div class="container py-3">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <span
+                        class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill mb-2 fw-semibold text-uppercase">Aggiornamento</span>
+                    <h1 class="h3 fw-bold text-dark mb-1">Modifica articolo</h1>
+                    <h2 class="h5 text-muted fw-normal" th:text="${article.title}">Titolo</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contenuto Principale -->
-    <main class="container py-5 my-4">
+    <main class="container py-5 my-3">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10">
-
-                <!-- Header della pagina -->
-                <div class="text-center mb-5">
-                    <span
-                        class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-2 fw-semibold text-uppercase">Gestione
-                        Contenuti</span>
-                    <h1 class="display-6 fw-bold text-dark" th:text="${title}">Inserisci un articolo</h1>
-                    <p class="text-muted">Compila i campi sottostanti per pubblicare un nuovo articolo sul blog.</p>
-                </div>
 
                 <!-- Form Card -->
                 <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
                     <div class="card-body p-0">
-                        <form th:action="@{/articles}" method="POST" th:object="${article}"
-                            enctype="multipart/form-data">
+                        <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST"
+                            th:object="${article}" enctype="multipart/form-data">
 
                             <!-- Titolo e Sottotitolo -->
                             <div class="row mb-3">
@@ -42,7 +47,7 @@
                                 <div class="col-12 col-md-6">
                                     <label for="subtitle" class="form-label fw-semibold text-dark">Sottotitolo</label>
                                     <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
-                                        placeholder="Inserisci un sottotitolo...">
+                                        placeholder="Inserisci il sottotitolo...">
                                     <div class="text-danger small mt-1" th:if="${#fields.hasErrors('subtitle')}"
                                         th:errors="*{subtitle}"></div>
                                 </div>
@@ -52,7 +57,7 @@
                             <div class="mb-3">
                                 <label for="body" class="form-label fw-semibold text-dark">Testo dell'articolo</label>
                                 <textarea id="body" class="form-control" rows="6" th:field="*{body}"
-                                    placeholder="Inserisci il testo dell'articolo..."></textarea>
+                                    placeholder="Inserisci il testo..."></textarea>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('body')}"
                                     th:errors="*{body}"></div>
                             </div>
@@ -63,14 +68,11 @@
                                     <label for="date" class="form-label fw-semibold text-dark">Data di
                                         pubblicazione</label>
                                     <input id="date" type="date" class="form-control" th:field="*{publishDate}">
-                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('publishDate')}"
-                                        th:errors="*{publishDate}"></div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="category" class="form-label fw-semibold text-dark">Categoria</label>
                                     <select id="category" th:field="*{category}" class="form-select">
-                                        <option value="" disabled selected>Seleziona una categoria...</option>
-                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                        <option th:each="category:${categories}" th:value="${category.id}"
                                             th:text="${category.name}"></option>
                                     </select>
                                     <div class="text-danger small mt-1" th:if="${#fields.hasErrors('category')}"
@@ -78,16 +80,35 @@
                                 </div>
                             </div>
 
-                            <!-- Immagine -->
-                            <div class="mb-4">
-                                <label for="image" class="form-label fw-semibold text-dark">Immagine in evidenza</label>
-                                <input type="file" name="file" id="image" class="form-control" />
+                            <!-- Sezione Immagine Attuale -->
+                            <div class="mb-4 p-3 bg-light rounded-3 border">
+                                <label class="form-label fw-semibold text-dark mb-2">Immagine attuale</label>
+                                <div th:if="${article.image != null}" class="d-flex align-items-center gap-3">
+                                    <img th:src="${article.image.path}" alt="Immagine articolo"
+                                        class="rounded object-fit-cover shadow-sm" style="width: 120px; height: 80px;">
+                                    <span class="text-muted small">L'immagine corrente verrà mantenuta se non ne carichi
+                                        una nuova.</span>
+                                </div>
+                                <div th:unless="${article.image != null}">
+                                    <p class="text-muted small mb-0"><i class="fas fa-image me-1"></i> Nessuna immagine
+                                        associata a questo articolo.</p>
+                                </div>
                             </div>
 
-                            <!-- Pulsante Invio -->
-                            <div class="d-grid pt-3 border-top">
-                                <button type="submit" class="btn btn-success py-2 rounded-pill shadow-sm">
-                                    <i class="fas fa-plus-circle me-2"></i> Crea articolo
+                            <!-- Carica Nuova Immagine -->
+                            <div class="mb-4">
+                                <label for="newImage" class="form-label fw-semibold text-dark">Sostituisci / Carica
+                                    nuova immagine</label>
+                                <input type="file" name="file" id="newImage" class="form-control" />
+                            </div>
+
+                            <!-- Pulsanti Azione -->
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                <a href="javascript:history.back()" class="text-secondary text-decoration-none small">
+                                    <i class="fas fa-arrow-left me-1"></i> Annulla
+                                </a>
+                                <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-save me-2"></i> Salva modifiche
                                 </button>
                             </div>
 

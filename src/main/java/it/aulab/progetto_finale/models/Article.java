@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,7 +50,7 @@ public class Article {
     @NotNull
     private LocalDate publishDate;
 
-    @Column (nullable = true)
+    @Column(nullable = true)
     private Boolean isAccepted;
 
     @ManyToOne
@@ -61,7 +62,21 @@ public class Article {
     @JsonIgnoreProperties({ "articles" })
     private Category category;
 
-    @OneToOne 
-    @JsonIgnoreProperties ({ "article" })
+    @OneToOne(mappedBy = "article", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({ "article" })
     private Image image;
+
+    @Override
+    public boolean equals(Object obj) {
+        Article article = (Article) obj;
+
+        if (title.equals(article.getTitle()) &&
+                subtitle.equals(article.getSubtitle()) &&
+                body.equals(article.getBody()) &&
+                category.getName().equals(article.getCategory().getName()) &&
+                image.getPath().equals(article.getImage().getPath())) {
+            return true;
+        }
+        return false;
+    }
 }

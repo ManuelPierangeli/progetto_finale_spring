@@ -38,8 +38,13 @@ public class SecurityConfig {
                                                 .requestMatchers("/revisor/dashboard", "/revisor/detail/{id}",
                                                                 "/accept")
                                                 .hasRole("REVISOR")
+                                                .requestMatchers("/write/dashboard", "/articles/create",
+                                                                "articles/edit/{id}", "/articles/update/{id}",
+                                                                "/articles/delete/{id}")
+                                                .hasRole("WRITER")
                                                 .requestMatchers("admin/dashboard").hasRole("ADMIN")
                                                 .requestMatchers("/register", "/", "/articles", "/images/**",
+                                                                "/css/**", "/js/**",
                                                                 "/articles/detail/**",
                                                                 "/categories/search/{id}",
                                                                 "/search/{id}",

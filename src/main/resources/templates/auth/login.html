@@ -1,51 +1,82 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head th:insert="~{index :: head}"></head>
+
 <body>
-    <head th:insert="~{index :: navbar}"></head>
-    
-    <div class="vh-100">
-        <br /><br />
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div th:if="${param.error}">
-                        <div class="alert alert-danger">Invalid Email or Password</div>
-                    </div>
-                    <div th:if="${param.logout}">
-                        <div class="alert alert-success">You have been logged out.</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="text-center">Login Form</h2>
+
+    <!-- Navbar -->
+    <header>
+        <div th:insert="~{index :: navbar}"></div>
+    </header>
+
+    <!-- Contenuto Principale -->
+    <main class="container py-5 my-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+                
+                <!-- Messaggi di errore o logout -->
+                <div th:if="${param.error}" class="alert alert-danger shadow-sm border-0 rounded-3 mb-4" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> Email o Password non validi.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success shadow-sm border-0 rounded-3 mb-4" role="alert">
+                    <i class="fas fa-check-circle me-2"></i> Hai effettuato il logout con successo.
+                </div>
+
+                <!-- Card Login -->
+                <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
+                    <div class="card-body p-0">
+                        
+                        <!-- Header del Form -->
+                        <div class="text-center mb-4">
+                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-2 fw-semibold text-uppercase">Bentornato</span>
+                            <h1 class="h3 fw-bold text-dark">Accedi al tuo account</h1>
+                            <p class="text-muted small">Inserisci le tue credenziali per continuare.</p>
                         </div>
-                        <div class="card-body">
-                            <form method="post" role="form" th:action="@{/login}" class="form-horizontal">
-                                <div class="form-group mb-3">
-                                    <label class="control-label">Email</label>
-                                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter email address"/>
+
+                        <!-- Form -->
+                        <form method="post" role="form" th:action="@{/login}" class="form-horizontal">
+                            
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-semibold text-dark">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input type="text" id="username" name="username" class="form-control border-start-0 ps-0" placeholder="Inserisci email..."/>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label class="control-label">Password</label>
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password"/>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-semibold text-dark">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                                    <input type="password" id="password" name="password" class="form-control border-start-0 ps-0" placeholder="Inserisci password..."/>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <span>Not registered ?
-                                        <a th:href="@{/register}">Register/Signup here</a>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Accedi
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4 pt-3 border-top">
+                                <span class="text-muted small">Non sei registrato? 
+                                    <a th:href="@{/register}" class="fw-bold text-primary text-decoration-none">Registrati qui</a>
+                                </span>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
-    </div>
+    </main>
 
-    <head th:insert="~{index :: footer}"></head>
+    <!-- Footer -->
+    <footer th:insert="~{index :: footer}"></footer>
+
+    <!-- Script Bootstrap -->
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
 </html>

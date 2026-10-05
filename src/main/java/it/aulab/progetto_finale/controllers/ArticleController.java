@@ -61,7 +61,8 @@ public class ArticleController {
     // Store
     @PostMapping
     private String articleStore(@Valid @ModelAttribute("article") Article article, BindingResult result,
-            RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel) {
+            RedirectAttributes redirectAttributes, Principal principal, @RequestParam("file") MultipartFile file,
+            Model viewModel) {
 
         if (result.hasErrors()) {
             viewModel.addAttribute("title", "Crea un articolo");
@@ -98,6 +99,46 @@ public class ArticleController {
         viewModel.addAttribute("title", "Article detail");
         viewModel.addAttribute("article", articleService.read(id));
         return "articles/detail";
+    }
+
+    // Route edit
+    @GetMapping("/edit/{id}")
+    public String editArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Atticle update");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "articles/edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id,
+            @Valid @ModelAttribute("article") Article article,
+            BindingResult result,
+            RedirectAttributes redirectAttributes,
+            Principal principal,
+            MultipartFile file,
+            Model viewModel) {
+        if (result.hasErrors()) {
+            viewModel.addAttribute("title", "Article update");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("categories", categoryService.readAll());
+            return "articles/edit";
+        }
+
+        articleService.update(id, article, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
+
+        return "redirect:/articles";
+    }
+
+    // Route delete
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato con successo!");
+
+        return "redirect:/writer/dashboard";
     }
 
     // Route detail from revisor
