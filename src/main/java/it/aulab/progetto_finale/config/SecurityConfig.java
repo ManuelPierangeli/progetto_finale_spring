@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import it.aulab.progetto_finale.services.CustomUserDetailsService;
-import jakarta.servlet.DispatcherType;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +31,14 @@ public class SecurityConfig {
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/register/**").permitAll()
+                                                .requestMatchers("/admin/dashboard", "/categories/create",
+                                                                "/categories/edit/{id}", "/categories/update/{id}",
+                                                                "/categories/delete/{id}")
+                                                .hasRole("ADMIN")
+                                                .requestMatchers("/revisor/dashboard", "/revisor/detail/{id}",
+                                                                "/accept")
+                                                .hasRole("REVISOR")
+                                                .requestMatchers("admin/dashboard").hasRole("ADMIN")
                                                 .requestMatchers("/register", "/", "/articles", "/images/**",
                                                                 "/articles/detail/**",
                                                                 "/categories/search/{id}",
