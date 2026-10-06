@@ -47,7 +47,7 @@ public class OperationController {
     }
 
     @PostMapping("/career/request/save")
-    public String carrerRequestStore(@ModelAttribute("careerRequest") CareerRequest careerRequest, Principal principal,
+    public String careerRequestStore(@ModelAttribute("careerRequest") CareerRequest careerRequest, Principal principal,
             RedirectAttributes redirectAttributes) {
         User user = userRepository.findByEmail(principal.getName());
 
@@ -57,7 +57,7 @@ public class OperationController {
         }
 
         careerRequestService.save(careerRequest, user);
-        redirectAttributes.addFlashAttribute("successMessage", "Richeista inviata con successo");
+        redirectAttributes.addFlashAttribute("successMessage", "Richiesta inviata con successo");
 
         return "redirect:/";
     }

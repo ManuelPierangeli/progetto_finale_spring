@@ -1,4 +1,4 @@
-CREATE TABLE carrer_request (
+CREATE TABLE career_request (
     id BIGINT auto_increment PRIMARY KEY,
     body TEXT,
     user_id BIGINT,
